@@ -11,8 +11,8 @@
   <h1>Ikura</h1>
   <p>
     Ikura is a fast and simple code highlighter designed to spice up your language designs. <br>
-    The thought is that language design is cool and all, but you're forced to parse through plain white text <br>
-    unless you go through the effort of making a full VS code extension or something similar.
+    The thought is that language design is cool and all, but you and your audience are forced to parse through plain white text <br>
+    --unless you go through the effort of making a full VS code extension or something similar.
   </p>
   <hr>
 
@@ -31,10 +31,15 @@
     <button id="submit-new-keyword-button">Register</button>
 
     <br>
-    <button id="show-keywords">Display all keywords</button>
+    <br>
+    <button id="show-keywords">Hide keywords list</button>
     <ul id="keywords-list">
 
     </ul>
+
+    <label for="remove-keyword">Remove a keyword</label>
+    <input id="remove-keyword">
+    <button id="submit-remove-keyword-button">Remove</button>
 
     <br>
     <label for="keyword-color-picker">How do you want your keywords to be represented?</label> <br>
@@ -54,16 +59,8 @@
       Or any other primitives.
     </p>
 
-    <label for="add-literal">Register a new keyword</label>
-    <input id="add-literal">
-    <button id="submit-new-literal-button">Register</button>
-
-
     <br>
-    <button id="show-literals">Display all keywords</button>
-    <ul id="literals-list">
-
-    </ul>
+    <p>You cannot change the literals that are recognized for now</p>
 
     <br>
     <label for="literal-color-picker">How do you want your literals to be represented?</label> <br>
@@ -82,28 +79,41 @@
       "in" in OCaml <br>
     </p>
 
-    <label for="add-conjunction">Register a new keyword</label>
+    <label for="add-conjunction">Register a new conjunction</label>
     <input id="add-conjunction">
     <button id="submit-new-conjunction-button">Register</button>
 
 
     <br>
-    <button id="show-conjunctions">Display all keywords</button>
+    <button id="show-conjunctions">Hide conjunctions list</button>
     <ul id="conjunctions-list">
 
     </ul>
 
-    <label for="conjunction-color-picker">How do you want your keywords to be represented?</label> <br>
+    <label for="remove-conjunction">Remove a keyword</label>
+    <input id="remove-conjunction">
+    <button id="submit-remove-conjunction-button">Remove</button>
+
+    <br>
+    <label for="conjunction-color-picker">How do you want your conjunctions to be represented?</label> <br>
     <input id="conjunction-color-picker" type="color">
   </div>
-
   <hr>
 </div>
 
 <div id="main-input">
   <label for="main-input-text">Text to highlight:</label> <br>
   <textarea id="main-input-text" rows="30" cols="50"></textarea>
+  <br>
+  <button id="submit-main-input">Highlight</button>
 </div>
 
+<br>
+<div id="highlighted-version">
+  <label for="highlighted-text">Highlighted text:</label> <br>
+  <textarea id="highlighted-text" rows="30" cols="50"></textarea>
+</div>
+
+<script src="coffeescripts/index.js"></script>
 </body>
 </html>
