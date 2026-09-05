@@ -33,7 +33,7 @@ darkMode = off
 lex = (word) ->
   if word in keywordsList     then return 'keyword'
   if word in conjunctionsList then return 'conjunction'
-  if word.match([/a-zA-Z0-9/])  then return 'literal' # refactor to support strings
+  if word.match(/^[^a-zA-Z0-9]*[a-zA-Z0-9]+[^a-zA-Z0-9]*$/)  then return 'literal' # refactor to support strings
   return 'other'
 
 insertKeyword = (keyword) ->
@@ -55,8 +55,6 @@ insertConjunction = (conjunction) ->
   return
 
 insertOther = (word) ->
-  console.log 'dark mode is:'
-  console.log darkMode
   if darkMode == on
     newTextArea.innerHTML += "<span style='color: white'>#{word}</span> "
     return
@@ -165,11 +163,9 @@ toggleDarkMode = () ->
   if darkMode == off
     newTextArea.style.backgroundColor = "#191a1c"
     darkMode = on
-    console.log 'dark mode is on'
   else
     newTextArea.style.backgroundColor = "white"
     darkMode = off
-    console.log 'dark mode is off'
 
 submitCodeButton.addEventListener 'click', () ->
   console.log 'clicked'

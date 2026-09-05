@@ -50,7 +50,7 @@
     if (indexOf.call(conjunctionsList, word) >= 0) {
       return 'conjunction';
     }
-    if (word.match([/a-zA-Z0-9/])) {
+    if (word.match(/^[^a-zA-Z0-9]*[a-zA-Z0-9]+[^a-zA-Z0-9]*$/)) {
       return 'literal'; // refactor to support strings
     }
     return 'other';
@@ -78,8 +78,6 @@
   };
 
   insertOther = function(word) {
-    console.log('dark mode is:');
-    console.log(darkMode);
     if (darkMode === true) {
       newTextArea.innerHTML += `<span style='color: white'>${word}</span> `;
       return;
@@ -241,12 +239,10 @@
   toggleDarkMode = function() {
     if (darkMode === false) {
       newTextArea.style.backgroundColor = "#191a1c";
-      darkMode = true;
-      return console.log('dark mode is on');
+      return darkMode = true;
     } else {
       newTextArea.style.backgroundColor = "white";
-      darkMode = false;
-      return console.log('dark mode is off');
+      return darkMode = false;
     }
   };
 
