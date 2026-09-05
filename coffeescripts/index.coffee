@@ -3,26 +3,32 @@ keywordColorPickerElement     = document.getElementById 'keyword-color-picker'
 literalColorPickerElement     = document.getElementById 'literal-color-picker'
 conjunctionColorPickerElement = document.getElementById 'conjunction-color-picker'
 
-newTextArea                  = document.getElementById 'highlighted-text'
+newTextArea                   = document.getElementById 'highlighted-text'
 
-submitCodeButton             = document.getElementById 'submit-main-input'
+submitCodeButton              = document.getElementById 'submit-main-input'
 
-registerNewKeywordButton     = document.getElementById 'submit-new-keyword-button'
-registerNewConjunctionButton = document.getElementById 'submit-new-conjunction-button'
+registerNewKeywordButton      = document.getElementById 'submit-new-keyword-button'
+registerNewConjunctionButton  = document.getElementById 'submit-new-conjunction-button'
 
-keywordsListElement          = document.getElementById 'keywords-list'
-conjunctionsListElement      = document.getElementById 'conjunctions-list'
+keywordsListElement           = document.getElementById 'keywords-list'
+conjunctionsListElement       = document.getElementById 'conjunctions-list'
 
-clearOutputButton            = document.getElementById 'clear-highlighted-text'
+clearOutputButton             = document.getElementById 'clear-highlighted-text'
 
-removeKeywordButton = document.getElementById 'submit-remove-keyword-button'
-keywordToRemove = document.getElementById 'remove-keyword'
+removeKeywordButton           = document.getElementById 'submit-remove-keyword-button'
+keywordToRemove               = document.getElementById 'remove-keyword'
 
-removeConjunctionButton = document.getElementById 'submit-remove-conjunction-button'
-conjunctionToRemove = document.getElementById 'remove-conjunction-textbox'
+removeConjunctionButton       = document.getElementById 'submit-remove-conjunction-button'
+conjunctionToRemove           = document.getElementById 'remove-conjunction-textbox'
+
+saveButton                    = document.getElementById 'save-registry'
+loadButton                    = document.getElementById 'load-registry'
+toggleDarkModeElement         = document.getElementById 'toggle-dark-mode'
 
 keywordsList = []
 conjunctionsList = []
+
+darkMode = off
 
 lex = (word) ->
   if word in keywordsList     then return 'keyword'
@@ -40,15 +46,24 @@ insertLiteral = (literal) ->
   literalColor = literalColorPickerElement.value
   newTextArea.innerHTML += "<span style='color: #{literalColor}'>#{literal}</span> "
   console.log 'added new literal'
+  return
 
 insertConjunction = (conjunction) ->
   conjunctionColor = conjunctionColorPickerElement.value
   newTextArea.innerHTML += "<span style='color: #{conjunctionColor}'>#{conjunction}</span> "
   console.log 'added new conjunction'
+  return
 
 insertOther = (word) ->
-  newTextArea.innerHTML += "#{word} "
-  console.log 'added new word'
+  console.log 'dark mode is:'
+  console.log darkMode
+  if darkMode == on
+    newTextArea.innerHTML += "<span style='color: white'>#{word}</span> "
+    return
+  else
+    newTextArea.innerHTML += "#{word} "
+    console.log 'added new word'
+  return
 
 
 # basically the main function
@@ -125,6 +140,37 @@ removeConjunction = () ->
       conjunctionsListElement.removeChild conjunctionIterator
       console.log 'removed conjunction from html'
 
+saveData = () ->
+  data = {
+    keywords: keywordsList
+    conjunctions: conjunctionsList
+  }
+  localStorage.setItem 'data', JSON.stringify(data)
+  console.log 'saved data'
+
+loadData = () ->
+  data = JSON.parse localStorage.getItem 'data'
+  keywordsList = data.keywords
+  conjunctionsList = data.conjunctions
+
+  for keyword in keywordsList
+    keywordsListElement.innerHTML += "<li>#{keyword}</li>"
+
+  for conjunction in conjunctionsList
+    conjunctionsListElement.innerHTML += "<li>#{conjunction}</li>"
+
+  console.log 'loaded data'
+
+toggleDarkMode = () ->
+  if darkMode == off
+    newTextArea.style.backgroundColor = "#191a1c"
+    darkMode = on
+    console.log 'dark mode is on'
+  else
+    newTextArea.style.backgroundColor = "white"
+    darkMode = off
+    console.log 'dark mode is off'
+
 submitCodeButton.addEventListener 'click', () ->
   console.log 'clicked'
   highlightCode()
@@ -142,5 +188,13 @@ removeKeywordButton.addEventListener 'click', () ->
   removeKeyword()
 
 removeConjunctionButton.addEventListener 'click', () ->
-  console.log 'clicked'
   removeConjunction()
+
+saveButton.addEventListener 'click', () ->
+  saveData()
+
+loadButton.addEventListener 'click', () ->
+  loadData()
+
+toggleDarkModeElement.addEventListener 'click', () ->
+  toggleDarkMode()
