@@ -17,30 +17,32 @@ registerNewConjunctionButton = document.getElementById 'submit-new-conjunction-b
 keywordsListElement          = document.getElementById 'keywords-list'
 conjunctionsListElement      = document.getElementById 'conjunctions-list'
 
+clearOutputButton            = document.getElementById 'clear-highlighted-text'
+
 keywordsList = []
 conjunctionsList = []
 
 lex = (word) ->
   if word in keywordsList     then return 'keyword'
   if word in conjunctionsList then return 'conjunction'
-  if word.match(/a-zA-Z0-9/)  then return 'literal' # refactor to support strings
+  if word.match([/a-zA-Z0-9/])  then return 'literal' # refactor to support strings
   return 'other'
 
 insertKeyword = (keyword) ->
-  newTextArea.value += "<span style='color: #{keywordColor}'>#{keyword}</span>}"
+  newTextArea.innerHTML += "<span style='color: #{keywordColor}'>#{keyword}</span> "
   console.log 'added new keyword'
   return
 
 insertLiteral = (literal) ->
-  newTextArea.value += "<span style='color: #{literalColor}'>#{literal}</span>}"
+  newTextArea.innerHTML += "<span style='color: #{literalColor}'>#{literal}</span> "
   console.log 'added new literal'
 
 insertConjunction = (conjunction) ->
-  newTextArea.value += "<span style='color: #{conjunctionColor}'>#{conjunction}</span>}"
+  newTextArea.innerHTML += "<span style='color: #{conjunctionColor}'>#{conjunction}</span> "
   console.log 'added new conjunction'
 
 insertOther = (word) ->
-  newTextArea.value += word
+  newTextArea.innerHTML += "#{word} "
   console.log 'added new word'
 
 
@@ -51,10 +53,17 @@ highlightCode = () ->
     console.log 'nothing to highlight'
     return
 
-  words = code.split(' ')
+  if keywordsList.length == 0 and conjunctionsList.length == 0
+    alert("You have no registered keywords or conjunctions; nothing will be highlighted.")
+    return
+
+  words = code.replace(/\n/g, ' NEWLINE ').split(/\s+/)
   for word in words
     console.log word
     token = lex word
+    if word == 'NEWLINE'
+      newTextArea.innerHTML += '<br>'
+      continue
     if token == 'keyword'     then insertKeyword(word)
     if token == 'literal'     then insertLiteral(word)
     if token == 'conjunction' then insertConjunction(word)
@@ -76,7 +85,7 @@ registerConjunction = () ->
   if newConjunction.length == 0
     alert("The textbox is empty")
     return
-  if newConjunction in keywordsList
+  if newConjunction in conjunctionsList
     alert("This conjunction is already registered: #{newConjunction}")
     return
   conjunctionsList.push newConjunction
@@ -91,5 +100,8 @@ registerNewKeywordButton.addEventListener 'click', () ->
 
 registerNewConjunctionButton.addEventListener 'click', () ->
   registerConjunction()
+
+clearOutputButton.addEventListener 'click', () ->
+  newTextArea.innerHTML = ''
 
 

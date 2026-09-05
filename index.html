@@ -43,7 +43,7 @@
 
     <br>
     <label for="keyword-color-picker">How do you want your keywords to be represented?</label> <br>
-    <input id="keyword-color-picker" type="color">
+    <input id="keyword-color-picker" type="color" value="#c2281c"> <!--Ruby on Rails red!-->
   </div>
 
   <hr>
@@ -64,7 +64,7 @@
 
     <br>
     <label for="literal-color-picker">How do you want your literals to be represented?</label> <br>
-    <input id="literal-color-picker" type="color">
+    <input id="literal-color-picker" type="color" value="#f6c951"> <!--Finnish coat of arms yellow!-->
   </div>
 
   <hr>
@@ -96,7 +96,7 @@
 
     <br>
     <label for="conjunction-color-picker">How do you want your conjunctions to be represented?</label> <br>
-    <input id="conjunction-color-picker" type="color">
+    <input id="conjunction-color-picker" type="color" value="#535e97"> <!--ElePHPant purple!-->
   </div>
   <hr>
 </div>
@@ -109,10 +109,12 @@
 </div>
 
 <br>
-<div id="highlighted-version">
-  <label for="highlighted-text">Highlighted text:</label> <br>
-  <textarea id="highlighted-text" rows="30" cols="50"></textarea>
+<h3>Output</h3>
+<div id="highlighted-text">
+
 </div>
+
+<button id="clear-highlighted-text">Clear highlighted text</button>
 
 <script src="coffeescripts/index.js"></script>
 </body>
