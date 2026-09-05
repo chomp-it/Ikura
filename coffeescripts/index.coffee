@@ -3,10 +3,6 @@ keywordColorPickerElement     = document.getElementById 'keyword-color-picker'
 literalColorPickerElement     = document.getElementById 'literal-color-picker'
 conjunctionColorPickerElement = document.getElementById 'conjunction-color-picker'
 
-keywordColor = keywordColorPickerElement.value
-literalColor = literalColorPickerElement.value
-conjunctionColor = conjunctionColorPickerElement.value
-
 newTextArea                  = document.getElementById 'highlighted-text'
 
 submitCodeButton             = document.getElementById 'submit-main-input'
@@ -19,6 +15,12 @@ conjunctionsListElement      = document.getElementById 'conjunctions-list'
 
 clearOutputButton            = document.getElementById 'clear-highlighted-text'
 
+removeKeywordButton = document.getElementById 'submit-remove-keyword-button'
+keywordToRemove = document.getElementById 'remove-keyword'
+
+removeConjunctionButton = document.getElementById 'submit-remove-conjunction-button'
+conjunctionToRemove = document.getElementById 'remove-conjunction-textbox'
+
 keywordsList = []
 conjunctionsList = []
 
@@ -29,15 +31,18 @@ lex = (word) ->
   return 'other'
 
 insertKeyword = (keyword) ->
+  keywordColor = keywordColorPickerElement.value
   newTextArea.innerHTML += "<span style='color: #{keywordColor}'>#{keyword}</span> "
   console.log 'added new keyword'
   return
 
 insertLiteral = (literal) ->
+  literalColor = literalColorPickerElement.value
   newTextArea.innerHTML += "<span style='color: #{literalColor}'>#{literal}</span> "
   console.log 'added new literal'
 
 insertConjunction = (conjunction) ->
+  conjunctionColor = conjunctionColorPickerElement.value
   newTextArea.innerHTML += "<span style='color: #{conjunctionColor}'>#{conjunction}</span> "
   console.log 'added new conjunction'
 
@@ -91,6 +96,35 @@ registerConjunction = () ->
   conjunctionsList.push newConjunction
   conjunctionsListElement.innerHTML += "<li>#{newConjunction}</li>"
 
+removeKeyword = () ->
+  unless keywordToRemove.value in keywordsList
+    alert("The keyword #{keywordToRemove.value} is not registered.")
+    return
+
+  for keywordIterator in keywordsList
+    if keywordIterator == keywordToRemove.value then keywordsList.splice keywordsList.indexOf(keywordIterator), 1
+
+  keywords = Array.from keywordsListElement.getElementsByTagName('li')
+  for keywordIterator in keywords
+    if keywordIterator.innerHTML == keywordToRemove.value then keywordsListElement.removeChild keywordIterator
+
+removeConjunction = () ->
+  unless conjunctionToRemove.value in conjunctionsList
+    alert("The conjunction #{conjunctionToRemove.value} is not registered.")
+    return
+
+  console.log 'fired removeConjunction'
+  for conjunctionIterator in conjunctionsList
+    if conjunctionIterator == conjunctionToRemove.value
+      conjunctionsList.splice conjunctionsList.indexOf(conjunctionIterator), 1
+      console.log 'removed conjunction from list'
+
+  conjunctions = Array.from conjunctionsListElement.getElementsByTagName('li')
+  for conjunctionIterator in conjunctions
+    if conjunctionIterator.innerHTML == conjunctionToRemove.value
+      conjunctionsListElement.removeChild conjunctionIterator
+      console.log 'removed conjunction from html'
+
 submitCodeButton.addEventListener 'click', () ->
   console.log 'clicked'
   highlightCode()
@@ -104,4 +138,9 @@ registerNewConjunctionButton.addEventListener 'click', () ->
 clearOutputButton.addEventListener 'click', () ->
   newTextArea.innerHTML = ''
 
+removeKeywordButton.addEventListener 'click', () ->
+  removeKeyword()
 
+removeConjunctionButton.addEventListener 'click', () ->
+  console.log 'clicked'
+  removeConjunction()
