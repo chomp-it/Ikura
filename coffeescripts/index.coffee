@@ -19,11 +19,14 @@ removeKeywordButton           = document.getElementById 'submit-remove-keyword-b
 keywordToRemove               = document.getElementById 'remove-keyword'
 
 removeConjunctionButton       = document.getElementById 'submit-remove-conjunction-button'
-conjunctionToRemove           = document.getElementById 'remove-conjunction-textbox'
+conjunctionToRemove           = document.getElementById 'remove-conjunction'
 
 saveButton                    = document.getElementById 'save-registry'
 loadButton                    = document.getElementById 'load-registry'
 toggleDarkModeElement         = document.getElementById 'toggle-dark-mode'
+
+hideKeywordListButton         = document.getElementById 'hide-keywords'
+hideConjunctionListButton     = document.getElementById 'hide-conjunctions'
 
 keywordsList = []
 conjunctionsList = []
@@ -75,13 +78,17 @@ highlightCode = () ->
     alert("You have no registered keywords or conjunctions; nothing will be highlighted.")
     return
 
-  words = code.replace(/\n/g, ' NEWLINE ').split(/\s+/)
+  words = code.replace(/\n/g, ' NEWLINE ').replace(/  /g, ' INDENT ').split(/\s+/)
   for word in words
     console.log word
     token = lex word
     if word == 'NEWLINE'
       newTextArea.innerHTML += '<br>'
       continue
+    if word == 'INDENT'
+      newTextArea.innerHTML += '&nbsp;&nbsp;'
+      continue
+
     if token == 'keyword'     then insertKeyword(word)
     if token == 'literal'     then insertLiteral(word)
     if token == 'conjunction' then insertConjunction(word)
@@ -89,7 +96,7 @@ highlightCode = () ->
 
 registerKeyword = () ->
   newKeyword = document.getElementById('add-keyword').value
-  if newKeyword.length == 0
+  if newKeyword.length == 0 or newKeyword == null
     alert("The textbox is empty")
     return
   if newKeyword in keywordsList
@@ -100,7 +107,7 @@ registerKeyword = () ->
 
 registerConjunction = () ->
   newConjunction = document.getElementById('add-conjunction').value
-  if newConjunction.length == 0
+  if newConjunction.length == 0 or newConjunction == null
     alert("The textbox is empty")
     return
   if newConjunction in conjunctionsList
@@ -110,6 +117,8 @@ registerConjunction = () ->
   conjunctionsListElement.innerHTML += "<li>#{newConjunction}</li>"
 
 removeKeyword = () ->
+  if keywordToRemove == null then return
+
   unless keywordToRemove.value in keywordsList
     alert("The keyword #{keywordToRemove.value} is not registered.")
     return
@@ -122,6 +131,9 @@ removeKeyword = () ->
     if keywordIterator.innerHTML == keywordToRemove.value then keywordsListElement.removeChild keywordIterator
 
 removeConjunction = () ->
+  if conjunctionToRemove.value == null or conjunctionToRemove.value == '' then return
+
+
   unless conjunctionToRemove.value in conjunctionsList
     alert("The conjunction #{conjunctionToRemove.value} is not registered.")
     return
@@ -167,6 +179,22 @@ toggleDarkMode = () ->
     newTextArea.style.backgroundColor = "white"
     darkMode = off
 
+toggleKeywordList = () ->
+  if keywordsListElement.style.display == 'none'
+    keywordsListElement.style.display = 'block'
+    hideKeywordListButton.innerHTML = 'Hide Keyword List'
+  else
+    keywordsListElement.style.display = 'none'
+    hideKeywordListButton.innerHTML = 'Show Keyword List'
+
+toggleConjunctionList = () ->
+  if conjunctionsListElement.style.display == 'none'
+    conjunctionsListElement.style.display = 'block'
+    hideConjunctionListButton.innerHTML = 'Hide Conjunction List'
+  else
+    conjunctionsListElement.style.display = 'none'
+    hideConjunctionListButton.innerHTML = 'Show Conjunction List'
+    
 submitCodeButton.addEventListener 'click', () ->
   console.log 'clicked'
   highlightCode()
@@ -194,3 +222,9 @@ loadButton.addEventListener 'click', () ->
 
 toggleDarkModeElement.addEventListener 'click', () ->
   toggleDarkMode()
+
+hideKeywordListButton.addEventListener 'click', () ->
+  toggleKeywordList()
+
+hideConjunctionListButton.addEventListener 'click', () ->
+  toggleConjunctionList()
