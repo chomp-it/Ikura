@@ -75,13 +75,17 @@ highlightCode = () ->
     alert("You have no registered keywords or conjunctions; nothing will be highlighted.")
     return
 
-  words = code.replace(/\n/g, ' NEWLINE ').split(/\s+/)
+  words = code.replace(/\n/g, ' NEWLINE ').replace(/  /g, ' INDENT ').split(/\s+/)
   for word in words
     console.log word
     token = lex word
     if word == 'NEWLINE'
       newTextArea.innerHTML += '<br>'
       continue
+    if word == 'INDENT'
+      newTextArea.innerHTML += '&nbsp;&nbsp;'
+      continue
+
     if token == 'keyword'     then insertKeyword(word)
     if token == 'literal'     then insertLiteral(word)
     if token == 'conjunction' then insertConjunction(word)
@@ -194,3 +198,4 @@ loadButton.addEventListener 'click', () ->
 
 toggleDarkModeElement.addEventListener 'click', () ->
   toggleDarkMode()
+

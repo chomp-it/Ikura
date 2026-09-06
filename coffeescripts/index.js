@@ -99,7 +99,7 @@
       alert("You have no registered keywords or conjunctions; nothing will be highlighted.");
       return;
     }
-    words = code.replace(/\n/g, ' NEWLINE ').split(/\s+/);
+    words = code.replace(/\n/g, ' NEWLINE ').replace(/  /g, ' INDENT ').split(/\s+/);
     results = [];
     for (i = 0, len = words.length; i < len; i++) {
       word = words[i];
@@ -107,6 +107,10 @@
       token = lex(word);
       if (word === 'NEWLINE') {
         newTextArea.innerHTML += '<br>';
+        continue;
+      }
+      if (word === 'INDENT') {
+        newTextArea.innerHTML += '&nbsp;&nbsp;';
         continue;
       }
       if (token === 'keyword') {
