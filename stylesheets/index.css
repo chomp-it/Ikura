@@ -5,3 +5,34 @@
     font-family: monospace;
     white-space: pre-wrap;
 }
+
+body {
+    background-color: #363636;
+    color: #d6c9c9;
+    font-family: "Verdana";
+    padding: 0.4rem;
+}
+
+button, input {
+    background-color: #5c5858;
+    color:#b8afaf;
+    border-radius: 0.12rem;
+}
+
+input { 
+    margin-top: 0.22rem; 
+    margin-bottom: 0.22rem; 
+}
+h1, h2, h3, h4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+textarea {
+    font-family: 'Courier New', Courier, monospace;
+    background-color:#181717;
+    color:#ccc;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
