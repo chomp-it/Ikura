@@ -58,7 +58,7 @@ insertConjunction = (conjunction) ->
   return
 
 insertOther = (word) ->
-  if darkMode == on
+  if darkMode is on
     newTextArea.innerHTML += "<span style='color: white'>#{word}</span> "
     return
   else
@@ -70,11 +70,11 @@ insertOther = (word) ->
 # basically the main function
 highlightCode = () ->
   code = document.getElementById('main-input-text').value
-  if code.length == 0
+  if code.length is 0
     console.log 'nothing to highlight'
     return
 
-  if keywordsList.length == 0 and conjunctionsList.length == 0
+  if keywordsList.length is 0 and conjunctionsList.length is 0
     alert("You have no registered keywords or conjunctions; nothing will be highlighted.")
     return
 
@@ -82,21 +82,21 @@ highlightCode = () ->
   for word in words
     console.log word
     token = lex word
-    if word == 'NEWLINE'
+    if word is 'NEWLINE'
       newTextArea.innerHTML += '<br>'
       continue
-    if word == 'INDENT'
+    if word is 'INDENT'
       newTextArea.innerHTML += '&nbsp;&nbsp;'
       continue
 
-    if token == 'keyword'     then insertKeyword(word)
-    if token == 'literal'     then insertLiteral(word)
-    if token == 'conjunction' then insertConjunction(word)
-    if token == 'other'       then insertOther(word)
+    if token is 'keyword'     then insertKeyword(word)
+    if token is 'literal'     then insertLiteral(word)
+    if token is 'conjunction' then insertConjunction(word)
+    if token is 'other'       then insertOther(word)
 
 registerKeyword = () ->
   newKeyword = document.getElementById('add-keyword').value
-  if newKeyword.length == 0 or newKeyword == null
+  if newKeyword.length is 0 or newKeyword == null
     alert("The textbox is empty")
     return
   if newKeyword in keywordsList
@@ -107,7 +107,7 @@ registerKeyword = () ->
 
 registerConjunction = () ->
   newConjunction = document.getElementById('add-conjunction').value
-  if newConjunction.length == 0 or newConjunction == null
+  if newConjunction.length is 0 or newConjunction == null
     alert("The textbox is empty")
     return
   if newConjunction in conjunctionsList
@@ -124,14 +124,14 @@ removeKeyword = () ->
     return
 
   for keywordIterator in keywordsList
-    if keywordIterator == keywordToRemove.value then keywordsList.splice keywordsList.indexOf(keywordIterator), 1
+    if keywordIterator is keywordToRemove.value then keywordsList.splice keywordsList.indexOf(keywordIterator), 1
 
   keywords = Array.from keywordsListElement.getElementsByTagName('li')
   for keywordIterator in keywords
-    if keywordIterator.innerHTML == keywordToRemove.value then keywordsListElement.removeChild keywordIterator
+    if keywordIterator.innerHTML is keywordToRemove.value then keywordsListElement.removeChild keywordIterator
 
 removeConjunction = () ->
-  if conjunctionToRemove.value == null or conjunctionToRemove.value == '' then return
+  if conjunctionToRemove.value == null or conjunctionToRemove.value is '' then return
 
 
   unless conjunctionToRemove.value in conjunctionsList
@@ -140,13 +140,13 @@ removeConjunction = () ->
 
   console.log 'fired removeConjunction'
   for conjunctionIterator in conjunctionsList
-    if conjunctionIterator == conjunctionToRemove.value
+    if conjunctionIterator is conjunctionToRemove.value
       conjunctionsList.splice conjunctionsList.indexOf(conjunctionIterator), 1
       console.log 'removed conjunction from list'
 
   conjunctions = Array.from conjunctionsListElement.getElementsByTagName('li')
   for conjunctionIterator in conjunctions
-    if conjunctionIterator.innerHTML == conjunctionToRemove.value
+    if conjunctionIterator.innerHTML is conjunctionToRemove.value
       conjunctionsListElement.removeChild conjunctionIterator
       console.log 'removed conjunction from html'
 
@@ -164,15 +164,15 @@ loadData = () ->
   conjunctionsList = data.conjunctions
 
   for keyword in keywordsList
-    keywordsListElement.innerHTML += "<li>#{keyword}</li>"
+    keywordsListElement.innerHTML += "<li>#{keyword}</li>" # fix eventually
 
   for conjunction in conjunctionsList
-    conjunctionsListElement.innerHTML += "<li>#{conjunction}</li>"
+    conjunctionsListElement.innerHTML += "<li>#{conjunction}</li>" # fix eventually
 
   console.log 'loaded data'
 
 toggleDarkMode = () ->
-  if darkMode == off
+  if darkMode is off
     newTextArea.style.backgroundColor = "#191a1c"
     darkMode = on
   else
@@ -180,7 +180,7 @@ toggleDarkMode = () ->
     darkMode = off
 
 toggleKeywordList = () ->
-  if keywordsListElement.style.display == 'none'
+  if keywordsListElement.style.display is 'none'
     keywordsListElement.style.display = 'block'
     hideKeywordListButton.innerHTML = 'Hide Keyword List'
   else
@@ -188,7 +188,7 @@ toggleKeywordList = () ->
     hideKeywordListButton.innerHTML = 'Show Keyword List'
 
 toggleConjunctionList = () ->
-  if conjunctionsListElement.style.display == 'none'
+  if conjunctionsListElement.style.display is 'none'
     conjunctionsListElement.style.display = 'block'
     hideConjunctionListButton.innerHTML = 'Hide Conjunction List'
   else
