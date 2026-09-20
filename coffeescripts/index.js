@@ -64,21 +64,18 @@
     var keywordColor;
     keywordColor = keywordColorPickerElement.value;
     newTextArea.innerHTML += `<span style='color: ${keywordColor}'>${keyword}</span> `;
-    console.log('added new keyword');
   };
 
   insertLiteral = function(literal) {
     var literalColor;
     literalColor = literalColorPickerElement.value;
     newTextArea.innerHTML += `<span style='color: ${literalColor}'>${literal}</span> `;
-    console.log('added new literal');
   };
 
   insertConjunction = function(conjunction) {
     var conjunctionColor;
     conjunctionColor = conjunctionColorPickerElement.value;
     newTextArea.innerHTML += `<span style='color: ${conjunctionColor}'>${conjunction}</span> `;
-    console.log('added new conjunction');
   };
 
   insertOther = function(word) {
@@ -87,7 +84,6 @@
       return;
     } else {
       newTextArea.innerHTML += `${word} `;
-      console.log('added new word');
     }
   };
 
@@ -96,7 +92,6 @@
     var code, i, len, results, token, word, words;
     code = document.getElementById('main-input-text').value;
     if (code.length === 0) {
-      console.log('nothing to highlight');
       return;
     }
     if (keywordsList.length === 0 && conjunctionsList.length === 0) {
@@ -107,7 +102,6 @@
     results = [];
     for (i = 0, len = words.length; i < len; i++) {
       word = words[i];
-      console.log(word);
       token = lex(word);
       if (word === 'NEWLINE') {
         newTextArea.innerHTML += '<br>';
@@ -147,7 +141,9 @@
       return;
     }
     keywordsList.push(newKeyword);
-    return keywordsListElement.innerHTML += `<li>${newKeyword}</li>`;
+    keywordsListElement.innerHTML += `<li>${newKeyword}</li>`;
+    // clear the input field
+    return document.getElementById('add-keyword').value = "";
   };
 
   registerConjunction = function() {
@@ -162,11 +158,13 @@
       return;
     }
     conjunctionsList.push(newConjunction);
-    return conjunctionsListElement.innerHTML += `<li>${newConjunction}</li>`;
+    conjunctionsListElement.innerHTML += `<li>${newConjunction}</li>`;
+    // clear the input field
+    return document.getElementById('add-conjunction').value = "";
   };
 
   removeKeyword = function() {
-    var i, j, keywordIterator, keywords, len, len1, ref, results;
+    var i, j, keywordIterator, keywords, len, len1, ref;
     if (keywordToRemove === null) {
       return;
     }
@@ -181,20 +179,18 @@
       }
     }
     keywords = Array.from(keywordsListElement.getElementsByTagName('li'));
-    results = [];
     for (j = 0, len1 = keywords.length; j < len1; j++) {
       keywordIterator = keywords[j];
       if (keywordIterator.innerHTML === keywordToRemove.value) {
-        results.push(keywordsListElement.removeChild(keywordIterator));
-      } else {
-        results.push(void 0);
+        keywordsListElement.removeChild(keywordIterator);
       }
     }
-    return results;
+    // clear the input field
+    return keywordToRemove.value = "";
   };
 
   removeConjunction = function() {
-    var conjunctionIterator, conjunctions, i, j, len, len1, ref, results;
+    var conjunctionIterator, conjunctions, i, j, len, len1, ref;
     if (conjunctionToRemove.value === null || conjunctionToRemove.value === '') {
       return;
     }
@@ -202,26 +198,21 @@
       alert(`The conjunction ${conjunctionToRemove.value} is not registered.`);
       return;
     }
-    console.log('fired removeConjunction');
     for (i = 0, len = conjunctionsList.length; i < len; i++) {
       conjunctionIterator = conjunctionsList[i];
       if (conjunctionIterator === conjunctionToRemove.value) {
         conjunctionsList.splice(conjunctionsList.indexOf(conjunctionIterator), 1);
-        console.log('removed conjunction from list');
       }
     }
     conjunctions = Array.from(conjunctionsListElement.getElementsByTagName('li'));
-    results = [];
     for (j = 0, len1 = conjunctions.length; j < len1; j++) {
       conjunctionIterator = conjunctions[j];
       if (conjunctionIterator.innerHTML === conjunctionToRemove.value) {
         conjunctionsListElement.removeChild(conjunctionIterator);
-        results.push(console.log('removed conjunction from html'));
-      } else {
-        results.push(void 0);
       }
     }
-    return results;
+    // clear input field
+    return conjunctionToRemove.value = "";
   };
 
   saveData = function() {
@@ -230,12 +221,11 @@
       keywords: keywordsList,
       conjunctions: conjunctionsList
     };
-    localStorage.setItem('data', JSON.stringify(data));
-    return console.log('saved data');
+    return localStorage.setItem('data', JSON.stringify(data));
   };
 
   loadData = function() {
-    var conjunction, data, i, j, keyword, len, len1;
+    var conjunction, data, i, j, keyword, len, len1, results;
     data = JSON.parse(localStorage.getItem('data'));
     keywordsList = data.keywords;
     conjunctionsList = data.conjunctions;
@@ -243,11 +233,12 @@
       keyword = keywordsList[i];
       keywordsListElement.innerHTML += `<li>${keyword}</li>`;
     }
+    results = [];
     for (j = 0, len1 = conjunctionsList.length; j < len1; j++) {
       conjunction = conjunctionsList[j];
-      conjunctionsListElement.innerHTML += `<li>${conjunction}</li>`;
+      results.push(conjunctionsListElement.innerHTML += `<li>${conjunction}</li>`);
     }
-    return console.log('loaded data');
+    return results;
   };
 
   toggleDarkMode = function() {
@@ -281,7 +272,6 @@
   };
 
   submitCodeButton.addEventListener('click', function() {
-    console.log('clicked');
     return highlightCode();
   });
 

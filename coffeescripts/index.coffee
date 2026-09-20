@@ -42,19 +42,16 @@ lex = (word) ->
 insertKeyword = (keyword) ->
   keywordColor = keywordColorPickerElement.value
   newTextArea.innerHTML += "<span style='color: #{keywordColor}'>#{keyword}</span> "
-  console.log 'added new keyword'
   return
 
 insertLiteral = (literal) ->
   literalColor = literalColorPickerElement.value
   newTextArea.innerHTML += "<span style='color: #{literalColor}'>#{literal}</span> "
-  console.log 'added new literal'
   return
 
 insertConjunction = (conjunction) ->
   conjunctionColor = conjunctionColorPickerElement.value
   newTextArea.innerHTML += "<span style='color: #{conjunctionColor}'>#{conjunction}</span> "
-  console.log 'added new conjunction'
   return
 
 insertOther = (word) ->
@@ -63,16 +60,12 @@ insertOther = (word) ->
     return
   else
     newTextArea.innerHTML += "#{word} "
-    console.log 'added new word'
   return
-
 
 # basically the main function
 highlightCode = () ->
   code = document.getElementById('main-input-text').value
-  if code.length is 0
-    console.log 'nothing to highlight'
-    return
+  if code.length is 0 then return
 
   if keywordsList.length is 0 and conjunctionsList.length is 0
     alert("You have no registered keywords or conjunctions; nothing will be highlighted.")
@@ -80,7 +73,6 @@ highlightCode = () ->
 
   words = code.replace(/\n/g, ' NEWLINE ').replace(/  /g, ' INDENT ').split(/\s+/)
   for word in words
-    console.log word
     token = lex word
     if word is 'NEWLINE'
       newTextArea.innerHTML += '<br>'
@@ -105,6 +97,9 @@ registerKeyword = () ->
   keywordsList.push newKeyword
   keywordsListElement.innerHTML += "<li>#{newKeyword}</li>"
 
+  # clear the input field
+  document.getElementById('add-keyword').value = ""
+
 registerConjunction = () ->
   newConjunction = document.getElementById('add-conjunction').value
   if newConjunction.length is 0 or newConjunction == null
@@ -115,6 +110,9 @@ registerConjunction = () ->
     return
   conjunctionsList.push newConjunction
   conjunctionsListElement.innerHTML += "<li>#{newConjunction}</li>"
+
+  # clear the input field
+  document.getElementById('add-conjunction').value = ""
 
 removeKeyword = () ->
   if keywordToRemove == null then return
@@ -130,6 +128,9 @@ removeKeyword = () ->
   for keywordIterator in keywords
     if keywordIterator.innerHTML is keywordToRemove.value then keywordsListElement.removeChild keywordIterator
 
+  # clear the input field
+  keywordToRemove.value = ""
+
 removeConjunction = () ->
   if conjunctionToRemove.value == null or conjunctionToRemove.value is '' then return
 
@@ -138,17 +139,17 @@ removeConjunction = () ->
     alert("The conjunction #{conjunctionToRemove.value} is not registered.")
     return
 
-  console.log 'fired removeConjunction'
   for conjunctionIterator in conjunctionsList
     if conjunctionIterator is conjunctionToRemove.value
       conjunctionsList.splice conjunctionsList.indexOf(conjunctionIterator), 1
-      console.log 'removed conjunction from list'
 
   conjunctions = Array.from conjunctionsListElement.getElementsByTagName('li')
   for conjunctionIterator in conjunctions
     if conjunctionIterator.innerHTML is conjunctionToRemove.value
       conjunctionsListElement.removeChild conjunctionIterator
-      console.log 'removed conjunction from html'
+
+  # clear input field
+  conjunctionToRemove.value = ""
 
 saveData = () ->
   data = {
@@ -156,7 +157,6 @@ saveData = () ->
     conjunctions: conjunctionsList
   }
   localStorage.setItem 'data', JSON.stringify(data)
-  console.log 'saved data'
 
 loadData = () ->
   data = JSON.parse localStorage.getItem 'data'
@@ -164,12 +164,10 @@ loadData = () ->
   conjunctionsList = data.conjunctions
 
   for keyword in keywordsList
-    keywordsListElement.innerHTML += "<li>#{keyword}</li>" # fix eventually
+    keywordsListElement.innerHTML += "<li>#{keyword}</li>"
 
   for conjunction in conjunctionsList
-    conjunctionsListElement.innerHTML += "<li>#{conjunction}</li>" # fix eventually
-
-  console.log 'loaded data'
+    conjunctionsListElement.innerHTML += "<li>#{conjunction}</li>"
 
 toggleDarkMode = () ->
   if darkMode is off
@@ -196,7 +194,7 @@ toggleConjunctionList = () ->
     hideConjunctionListButton.innerHTML = 'Show Conjunction List'
     
 submitCodeButton.addEventListener 'click', () ->
-  console.log 'clicked'
+
   highlightCode()
 
 registerNewKeywordButton.addEventListener 'click', () ->
