@@ -1,62 +1,58 @@
 
-newTextArea                   = document.getElementById 'highlighted-text'
+newTextArea                  = document.getElementById 'highlighted-text'
 
-submitCodeButton              = document.getElementById 'submit-main-input'
+submitCodeButton             = document.getElementById 'submit-main-input'
 
-registerNewKeywordButton      = document.getElementById 'submit-new-keyword-button'
-registerNewConjunctionButton  = document.getElementById 'submit-new-conjunction-button'
+registerNewKeywordButton     = document.getElementById 'submit-new-keyword-button'
+registerNewConjunctionButton = document.getElementById 'submit-new-conjunction-button'
 
-keywordsListElement           = document.getElementById 'keywords-list'
-conjunctionsListElement       = document.getElementById 'conjunctions-list'
+keywordsListElement          = document.getElementById 'keywords-list'
+conjunctionsListElement      = document.getElementById 'conjunctions-list'
 
-clearOutputButton             = document.getElementById 'clear-highlighted-text'
+clearOutputButton            = document.getElementById 'clear-highlighted-text'
 
-removeKeywordButton           = document.getElementById 'submit-remove-keyword-button'
-keywordToRemove               = document.getElementById 'remove-keyword'
+removeKeywordButton          = document.getElementById 'submit-remove-keyword-button'
+keywordToRemove              = document.getElementById 'remove-keyword'
 
-removeConjunctionButton       = document.getElementById 'submit-remove-conjunction-button'
-conjunctionToRemove           = document.getElementById 'remove-conjunction'
+removeConjunctionButton      = document.getElementById 'submit-remove-conjunction-button'
+conjunctionToRemove          = document.getElementById 'remove-conjunction'
 
-saveButton                    = document.getElementById 'save-registry'
-loadButton                    = document.getElementById 'load-registry'
-toggleDarkModeElement         = document.getElementById 'toggle-dark-mode'
+saveButton                   = document.getElementById 'save-registry'
+loadButton                   = document.getElementById 'load-registry'
+toggleDarkModeElement        = document.getElementById 'toggle-dark-mode'
 
-hideKeywordListButton         = document.getElementById 'hide-keywords'
-hideConjunctionListButton     = document.getElementById 'hide-conjunctions'
+hideKeywordListButton        = document.getElementById 'hide-keywords'
+hideConjunctionListButton    = document.getElementById 'hide-conjunctions'
 
-keywordsList = []
+keywordsList     = []
 conjunctionsList = []
 
-darkMode = off
+darkMode       = off
 
+literalRegex = /^[^a-zA-Z0-9]*[a-zA-Z0-9]+[^a-zA-Z0-9]*$/
 lex = (word) ->
   if word in keywordsList     then return 'keyword'
   if word in conjunctionsList then return 'conjunction'
-  if word.match(/^[^a-zA-Z0-9]*[a-zA-Z0-9]+[^a-zA-Z0-9]*$/)  then return 'literal' # refactor to support strings
+  if word.match literalRegex  then return 'literal' # refactor to support strings
   return 'other'
 
 insertKeyword = (keyword) ->
   keywordColor = document.getElementById('keyword-color-picker').value
   newTextArea.innerHTML += "<span style='color: #{keywordColor}'>#{keyword}</span> "
-  return
 
 insertLiteral = (literal) ->
   literalColor = document.getElementById('literal-color-picker').value
   newTextArea.innerHTML += "<span style='color: #{literalColor}'>#{literal}</span> "
-  return
 
 insertConjunction = (conjunction) ->
   conjunctionColor = document.getElementById('conjunction-color-picker').value
   newTextArea.innerHTML += "<span style='color: #{conjunctionColor}'>#{conjunction}</span> "
-  return
 
 insertOther = (word) ->
   if darkMode is on
     newTextArea.innerHTML += "<span style='color: white'>#{word}</span> "
-    return
   else
     newTextArea.innerHTML += "#{word} "
-  return
 
 # basically the main function
 highlightCode = () ->
@@ -64,7 +60,7 @@ highlightCode = () ->
   if code.length is 0 then return
 
   if keywordsList.length is 0 and conjunctionsList.length is 0
-    alert("You have no registered keywords or conjunctions; nothing will be highlighted.")
+    alert "You have no registered keywords or conjunctions; nothing will be highlighted."
     return
 
   words = code.replace(/\n/g, ' NEWLINE ').replace(/  /g, ' INDENT ').split(/\s+/)
@@ -85,10 +81,10 @@ highlightCode = () ->
 registerKeyword = () ->
   newKeyword = document.getElementById('add-keyword').value
   if newKeyword.length is 0 or newKeyword == null
-    alert("The textbox is empty")
+    alert "The textbox is empty"
     return
   if newKeyword in keywordsList
-    alert("This keyword is already registered: #{newKeyword}")
+    alert "This keyword is already registered: #{newKeyword}"
     return
   keywordsList.push newKeyword
   keywordsListElement.innerHTML += "<li class='keyword'>#{newKeyword}</li>"
@@ -110,11 +106,11 @@ registerConjunction = () ->
   # clear the input field
   document.getElementById('add-conjunction').value = ""
 
-removeKeyword = () ->
+removeKeyword = ->
   if keywordToRemove == null then return
 
   unless keywordToRemove.value in keywordsList
-    alert("The keyword #{keywordToRemove.value} is not registered.")
+    alert "The keyword #{keywordToRemove.value} is not registered."
     return
 
   for keywordIterator in keywordsList
@@ -127,19 +123,18 @@ removeKeyword = () ->
   # clear the input field
   keywordToRemove.value = ""
 
-removeConjunction = () ->
+removeConjunction = ->
   if conjunctionToRemove.value == null or conjunctionToRemove.value is '' then return
 
-
   unless conjunctionToRemove.value in conjunctionsList
-    alert("The conjunction #{conjunctionToRemove.value} is not registered.")
+    alert "The conjunction #{conjunctionToRemove.value} is not registered."
     return
 
   for conjunctionIterator in conjunctionsList
     if conjunctionIterator is conjunctionToRemove.value
       conjunctionsList.splice conjunctionsList.indexOf(conjunctionIterator), 1
 
-  conjunctions = Array.from conjunctionsListElement.getElementsByTagName('li')
+  conjunctions = Array.from conjunctionsListElement.getElementsByTagName 'li'
   for conjunctionIterator in conjunctions
     if conjunctionIterator.innerHTML is conjunctionToRemove.value
       conjunctionsListElement.removeChild conjunctionIterator
@@ -147,14 +142,14 @@ removeConjunction = () ->
   # clear input field
   conjunctionToRemove.value = ""
 
-saveData = () ->
+saveData = ->
   data = {
     keywords: keywordsList
     conjunctions: conjunctionsList
   }
-  localStorage.setItem 'data', JSON.stringify(data)
+  localStorage.setItem 'data', JSON.stringify data
 
-loadData = () ->
+loadData = ->
   data = JSON.parse localStorage.getItem 'data'
   keywordsList = data.keywords
   conjunctionsList = data.conjunctions
@@ -165,7 +160,7 @@ loadData = () ->
   for conjunction in conjunctionsList
     conjunctionsListElement.innerHTML += "<li>#{conjunction}</li>"
 
-toggleDarkMode = () ->
+toggleDarkMode = ->
   if darkMode is off
     newTextArea.style.backgroundColor = "#191a1c"
     darkMode = on
@@ -173,7 +168,7 @@ toggleDarkMode = () ->
     newTextArea.style.backgroundColor = "white"
     darkMode = off
 
-toggleKeywordList = () ->
+toggleKeywordList = ->
   if keywordsListElement.style.display is 'none'
     keywordsListElement.style.display = 'block'
     hideKeywordListButton.innerHTML = 'Hide Keyword List'
@@ -181,7 +176,7 @@ toggleKeywordList = () ->
     keywordsListElement.style.display = 'none'
     hideKeywordListButton.innerHTML = 'Show Keyword List'
 
-toggleConjunctionList = () ->
+toggleConjunctionList = ->
   if conjunctionsListElement.style.display is 'none'
     conjunctionsListElement.style.display = 'block'
     hideConjunctionListButton.innerHTML = 'Hide Conjunction List'
@@ -232,8 +227,8 @@ document.getElementById('scaffold-keywords').addEventListener 'click', () ->
 hidden = false
 document.getElementById('hide-all-forms').addEventListener 'click', () ->
   if hidden
-    hidden = false
     document.getElementById('forms').style.display = 'block'
+    hidden = false
   else
-    hidden = true
     document.getElementById('forms').style.display = 'none'
+    hidden = true
