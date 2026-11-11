@@ -232,3 +232,12 @@ document.getElementById('scaffold-keywords').addEventListener 'click', () ->
     if keyword not in keywordsList
       keywordsList.push keyword
       keywordsListElement.innerHTML += "<li>#{keyword}</li>"
+
+hidden = false
+document.getElementById('hide-all-forms').addEventListener 'click', () ->
+  if hidden
+    hidden = false
+    document.getElementById('forms').style.display = 'block'
+  else
+    hidden = true
+    document.getElementById('forms').style.display = 'none'
