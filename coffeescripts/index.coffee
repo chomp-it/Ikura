@@ -1,8 +1,4 @@
 
-keywordColorPickerElement     = document.getElementById 'keyword-color-picker'
-literalColorPickerElement     = document.getElementById 'literal-color-picker'
-conjunctionColorPickerElement = document.getElementById 'conjunction-color-picker'
-
 newTextArea                   = document.getElementById 'highlighted-text'
 
 submitCodeButton              = document.getElementById 'submit-main-input'
@@ -40,17 +36,17 @@ lex = (word) ->
   return 'other'
 
 insertKeyword = (keyword) ->
-  keywordColor = keywordColorPickerElement.value
+  keywordColor = document.getElementById('keyword-color-picker').value
   newTextArea.innerHTML += "<span style='color: #{keywordColor}'>#{keyword}</span> "
   return
 
 insertLiteral = (literal) ->
-  literalColor = literalColorPickerElement.value
+  literalColor = document.getElementById('literal-color-picker').value
   newTextArea.innerHTML += "<span style='color: #{literalColor}'>#{literal}</span> "
   return
 
 insertConjunction = (conjunction) ->
-  conjunctionColor = conjunctionColorPickerElement.value
+  conjunctionColor = document.getElementById('conjunction-color-picker').value
   newTextArea.innerHTML += "<span style='color: #{conjunctionColor}'>#{conjunction}</span> "
   return
 
@@ -95,7 +91,7 @@ registerKeyword = () ->
     alert("This keyword is already registered: #{newKeyword}")
     return
   keywordsList.push newKeyword
-  keywordsListElement.innerHTML += "<li>#{newKeyword}</li>"
+  keywordsListElement.innerHTML += "<li class='keyword'>#{newKeyword}</li>"
 
   # clear the input field
   document.getElementById('add-keyword').value = ""
@@ -109,7 +105,7 @@ registerConjunction = () ->
     alert("This conjunction is already registered: #{newConjunction}")
     return
   conjunctionsList.push newConjunction
-  conjunctionsListElement.innerHTML += "<li>#{newConjunction}</li>"
+  conjunctionsListElement.innerHTML += "<li class='conjunction'>#{newConjunction}</li>"
 
   # clear the input field
   document.getElementById('add-conjunction').value = ""
