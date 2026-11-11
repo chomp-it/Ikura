@@ -10,40 +10,54 @@
 <body>
 <div id="with-font">
   <h1>Ikura</h1>
-  <p>
-    Ikura is a fast and simple code highlighter designed to spice up your language designs. <br>
-    The thought is that language design is cool and all, but you and your audience are forced to parse through plain white text <br>
-    --unless you go through the effort of making a full VS code extension or something similar.
-  </p>
+  <a href="what-is-ikura.html">What is Ikura?</a>
+
   <hr>
 
-  <h4>Other options:</h4>
+  <button id="show-options">Show more options</button>
 
-  <button id="save-registry">Save all of your registered words</button>
+  <div id="more-options" hidden>
+    <h4>Other options:</h4>
 
-  <br>
-  <br>
-  <button id="load-registry">Load your registered words</button>
+    <button id="save-registry">Save all of your registered words</button>
 
-  <br>
-  <br>
-  <button id="toggle-dark-mode">Toggle dark mode for the highlighted code</button>
+    <br>
+    <br>
+    <button id="load-registry">Load your registered words</button>
+
+    <br>
+    <br>
+    <button id="toggle-dark-mode">Toggle dark mode for the highlighted code</button>
+  </div>
 
   <hr>
 
   <div id="keywords">
     <h3>Keywords</h3>
 
-    <p>
-      For example: <br>
-      function, async, and let in JavaScript; <br>
-      unless, begin, and rescue in Ruby; <br>
-      switch, echo, and while in PHP.
-    </p>
+    <button id="show-keyword-examples">Show examples</button> <br>
+    <div id="keyword-examples" hidden>
+      <p>
+        For example: <br>
+        function, async, and let in JavaScript; <br>
+        unless, begin, and rescue in Ruby; <br>
+        switch, echo, and while in PHP.
+      </p>
+    </div>
+
+    <script>
+      document.getElementById("show-keyword-examples").addEventListener("click", () => {
+        document.getElementById("keyword-examples").hidden = !document.getElementById("keyword-examples").hidden
+      })
+    </script>
 
     <label for="add-keyword">Register a new keyword</label>
     <input id="add-keyword">
     <button id="submit-new-keyword-button">Register</button>
+
+    <br>
+    <br>
+    <button id="scaffold-keywords">Generate some generic keywords</button>
 
     <br>
     <br>
@@ -68,13 +82,22 @@
   <div id="literals">
     <h3>Literals</h3>
 
-    <p>
-      For example: <br>
-      integers like 96 or 2004 <br>
-      floats like 06.081995 <br> <!--The first release of PHP!-->
-      strings like "Nemo my name forevermore" <br>
-      Or any other primitives.
-    </p>
+    <button id="show-literal-examples">Show examples</button> <br>
+    <div id="literal-examples" hidden>
+      <p>
+        For example: <br>
+        integers like 96 or 2004 <br>
+        floats like 06.081995 <br> <!--The first release of PHP!-->
+        strings like "Nemo my name forevermore" <br>
+        Or any other primitives.
+      </p>
+    </div>
+
+    <script>
+      document.getElementById("show-literal-examples").addEventListener("click", () => {
+        document.getElementById("literal-examples").hidden = !document.getElementById("literal-examples").hidden
+      })
+    </script>
 
     <br>
     <p>You cannot change the literals that are recognized for now</p>
@@ -89,12 +112,21 @@
   <div id="conjunctions">
     <h3>Conjunctions</h3>
 
-    <p>
-      For example: <br>
-      do in Ruby, <br>
-      -> in Erlang or CoffeeScript, <br>
-      "in" in OCaml <br>
-    </p>
+    <button id="show-conjunction-examples">Show examples</button> <br>
+    <div id="conjunction-examples" hidden>
+      <p>
+        For example: <br>
+        do in Ruby, <br>
+        -> in Erlang or CoffeeScript, <br>
+        "in" in OCaml <br>
+      </p>
+    </div>
+
+    <script>
+      document.getElementById("show-conjunction-examples").addEventListener("click", () => {
+        document.getElementById("conjunction-examples").hidden = !document.getElementById("conjunction-examples").hidden
+      })
+    </script>
 
     <label for="add-conjunction">Register a new conjunction</label>
     <input id="add-conjunction">
@@ -133,6 +165,12 @@
 </div>
 
 <button id="clear-highlighted-text">Clear highlighted text</button>
+
+<script>
+  document.getElementById("show-options").addEventListener("click", () => {
+    document.getElementById("more-options").hidden = !document.getElementById("more-options").hidden
+  })
+</script>
 
 <script src="coffeescripts/index.js"></script>
 </body>

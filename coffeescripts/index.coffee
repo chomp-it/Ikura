@@ -226,3 +226,9 @@ hideKeywordListButton.addEventListener 'click', () ->
 
 hideConjunctionListButton.addEventListener 'click', () ->
   toggleConjunctionList()
+
+document.getElementById('scaffold-keywords').addEventListener 'click', () ->
+  ["if", "else", "for", "while"].forEach (keyword) ->
+    if keyword not in keywordsList
+      keywordsList.push keyword
+      keywordsListElement.innerHTML += "<li>#{keyword}</li>"

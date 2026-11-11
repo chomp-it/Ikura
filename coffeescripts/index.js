@@ -315,6 +315,13 @@
     return toggleConjunctionList();
   });
 
-}).call(this);
+  document.getElementById('scaffold-keywords').addEventListener('click', function() {
+    return ["if", "else", "for", "while"].forEach(function(keyword) {
+      if (indexOf.call(keywordsList, keyword) < 0) {
+        keywordsList.push(keyword);
+        return keywordsListElement.innerHTML += `<li>${keyword}</li>`;
+      }
+    });
+  });
 
-//# sourceMappingURL=index.js.map
+}).call(this);
