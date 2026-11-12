@@ -53,10 +53,8 @@ insertConjunction = (conjunction) ->
   newTextArea.innerHTML += "<span style='color: #{conjunctionColor}'>#{conjunction}</span> "
 
 insertOther = (word) ->
-  if darkMode is on
-    newTextArea.innerHTML += "<span style='color: white'>#{word}</span> "
-  else
-    newTextArea.innerHTML += "#{word} "
+  color = if darkMode is on then 'white' else 'inherit'
+  newTextArea.innerHTML += "<span style='color: #{color}'>#{word}</span> "
 
 # basically the main function
 highlightCode = () ->
@@ -87,9 +85,9 @@ highlightCode = () ->
 
 registerKeyword = () ->
   newKeyword = document.getElementById('add-keyword').value
-  if newKeyword.length is 0 or newKeyword == null
-    alert "The textbox is empty"
-    return
+
+  unless newKeyword then alert "The textbox is empty"; return
+
   if newKeyword in keywordsList
     alert "This keyword is already registered: #{newKeyword}"
     return
@@ -101,9 +99,9 @@ registerKeyword = () ->
 
 registerConjunction = () ->
   newConjunction = document.getElementById('add-conjunction').value
-  if newConjunction.length is 0 or newConjunction == null
-    alert("The textbox is empty")
-    return
+
+  unless newConjunction then alert "The textbox is empty"; return
+
   if newConjunction in conjunctionsList
     alert("This conjunction is already registered: #{newConjunction}")
     return
@@ -191,38 +189,18 @@ toggleConjunctionList = ->
     conjunctionsListElement.style.display = 'none'
     hideConjunctionListButton.innerHTML = 'Show Conjunction List'
     
-submitCodeButton.addEventListener 'click', () ->
-  highlightCode()
+submitCodeButton.addEventListener             'click', highlightCode
+registerNewKeywordButton.addEventListener     'click', registerKeyword
+registerNewConjunctionButton.addEventListener 'click', registerConjunction
+removeKeywordButton.addEventListener          'click', removeKeyword
+removeConjunctionButton.addEventListener      'click', removeConjunction
+saveButton.addEventListener                   'click', saveData
+loadButton.addEventListener                   'click', loadData
+toggleDarkModeElement.addEventListener        'click', toggleDarkMode
+hideKeywordListButton.addEventListener        'click', toggleKeywordList
+hideConjunctionListButton.addEventListener    'click', toggleConjunctionList
 
-registerNewKeywordButton.addEventListener 'click', () ->
-  registerKeyword()
-
-registerNewConjunctionButton.addEventListener 'click', () ->
-  registerConjunction()
-
-clearOutputButton.addEventListener 'click', () ->
-  newTextArea.innerHTML = ''
-
-removeKeywordButton.addEventListener 'click', () ->
-  removeKeyword()
-
-removeConjunctionButton.addEventListener 'click', () ->
-  removeConjunction()
-
-saveButton.addEventListener 'click', () ->
-  saveData()
-
-loadButton.addEventListener 'click', () ->
-  loadData()
-
-toggleDarkModeElement.addEventListener 'click', () ->
-  toggleDarkMode()
-
-hideKeywordListButton.addEventListener 'click', () ->
-  toggleKeywordList()
-
-hideConjunctionListButton.addEventListener 'click', () ->
-  toggleConjunctionList()
+clearOutputButton.addEventListener 'click', -> newTextArea.innerHTML = ''
 
 document.getElementById('scaffold-keywords').addEventListener 'click', () ->
   ["if", "else", "for", "while"].forEach (keyword) ->

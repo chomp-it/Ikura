@@ -80,11 +80,9 @@
   };
 
   insertOther = function(word) {
-    if (darkMode === true) {
-      return newTextArea.innerHTML += `<span style='color: white'>${word}</span> `;
-    } else {
-      return newTextArea.innerHTML += `${word} `;
-    }
+    var color;
+    color = darkMode === true ? 'white' : 'inherit';
+    return newTextArea.innerHTML += `<span style='color: ${color}'>${word}</span> `;
   };
 
   // basically the main function
@@ -103,7 +101,6 @@
     results = [];
     for (i = 0, len = words.length; i < len; i++) {
       word = words[i];
-      token = lex(word);
       if (word === 'NEWLINE') {
         newTextArea.innerHTML += '<br>';
         continue;
@@ -112,6 +109,7 @@
         newTextArea.innerHTML += '&nbsp;&nbsp;';
         continue;
       }
+      token = lex(word);
       if (token === 'keyword') {
         insertKeyword(word);
       }
@@ -133,7 +131,7 @@
   registerKeyword = function() {
     var newKeyword;
     newKeyword = document.getElementById('add-keyword').value;
-    if (newKeyword.length === 0 || newKeyword === null) {
+    if (!newKeyword) {
       alert("The textbox is empty");
       return;
     }
@@ -150,7 +148,7 @@
   registerConjunction = function() {
     var newConjunction;
     newConjunction = document.getElementById('add-conjunction').value;
-    if (newConjunction.length === 0 || newConjunction === null) {
+    if (!newConjunction) {
       alert("The textbox is empty");
       return;
     }
@@ -272,48 +270,28 @@
     }
   };
 
-  submitCodeButton.addEventListener('click', function() {
-    return highlightCode();
-  });
+  submitCodeButton.addEventListener('click', highlightCode);
 
-  registerNewKeywordButton.addEventListener('click', function() {
-    return registerKeyword();
-  });
+  registerNewKeywordButton.addEventListener('click', registerKeyword);
 
-  registerNewConjunctionButton.addEventListener('click', function() {
-    return registerConjunction();
-  });
+  registerNewConjunctionButton.addEventListener('click', registerConjunction);
+
+  removeKeywordButton.addEventListener('click', removeKeyword);
+
+  removeConjunctionButton.addEventListener('click', removeConjunction);
+
+  saveButton.addEventListener('click', saveData);
+
+  loadButton.addEventListener('click', loadData);
+
+  toggleDarkModeElement.addEventListener('click', toggleDarkMode);
+
+  hideKeywordListButton.addEventListener('click', toggleKeywordList);
+
+  hideConjunctionListButton.addEventListener('click', toggleConjunctionList);
 
   clearOutputButton.addEventListener('click', function() {
     return newTextArea.innerHTML = '';
-  });
-
-  removeKeywordButton.addEventListener('click', function() {
-    return removeKeyword();
-  });
-
-  removeConjunctionButton.addEventListener('click', function() {
-    return removeConjunction();
-  });
-
-  saveButton.addEventListener('click', function() {
-    return saveData();
-  });
-
-  loadButton.addEventListener('click', function() {
-    return loadData();
-  });
-
-  toggleDarkModeElement.addEventListener('click', function() {
-    return toggleDarkMode();
-  });
-
-  hideKeywordListButton.addEventListener('click', function() {
-    return toggleKeywordList();
-  });
-
-  hideConjunctionListButton.addEventListener('click', function() {
-    return toggleConjunctionList();
   });
 
   document.getElementById('scaffold-keywords').addEventListener('click', function() {
