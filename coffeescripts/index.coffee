@@ -29,6 +29,10 @@ conjunctionsList = []
 
 darkMode       = off
 
+# replace curly quotes (single or double) with straight quotes
+cleanUp = (text) ->
+  text.replace(/[“]/g, '"').replace /[’]/g, "'"
+
 literalRegex = /^[^a-zA-Z0-9]*[a-zA-Z0-9]+[^a-zA-Z0-9]*$/
 lex = (word) ->
   if word in keywordsList     then return 'keyword'
@@ -63,15 +67,18 @@ highlightCode = () ->
     alert "You have no registered keywords or conjunctions; nothing will be highlighted."
     return
 
-  words = code.replace(/\n/g, ' NEWLINE ').replace(/  /g, ' INDENT ').split(/\s+/)
+  code = cleanUp code
+
+  words = code.replace(/\n/g, ' NEWLINE ').replace(/  /g, ' INDENT ').split /\s+/
   for word in words
-    token = lex word
     if word is 'NEWLINE'
       newTextArea.innerHTML += '<br>'
       continue
     if word is 'INDENT'
       newTextArea.innerHTML += '&nbsp;&nbsp;'
       continue
+
+    token = lex word
 
     if token is 'keyword'     then insertKeyword(word)
     if token is 'literal'     then insertLiteral(word)
@@ -185,7 +192,6 @@ toggleConjunctionList = ->
     hideConjunctionListButton.innerHTML = 'Show Conjunction List'
     
 submitCodeButton.addEventListener 'click', () ->
-
   highlightCode()
 
 registerNewKeywordButton.addEventListener 'click', () ->
