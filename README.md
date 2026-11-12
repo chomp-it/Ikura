@@ -17,16 +17,6 @@ Conjunctions are things like `do` in Ruby or `in` in OCaml.
 
 Literals are strings, integers, and other primitives.
 
-I'm not going to explain anything else other than the installation because Ikura is pretty straightforward and visual.
-
-Below is a guide on installing Ikura.
-
-Ikura is self-hosted, meaning you have to launch the process yourself.
-
-First, you'll want to get the source code. Do that by git cloning this repo into a new directory, and then cd into it.
-
-My preferred way to use Ikura is through serve. Any other way will work too.
-
-Once you have it up and running on localhost, go to the url and you should be able to figure out the rest from there.
+Give Ikura a try! It's hosted on GitHub Pages, and if you like it enough, then you can always host it yourself.
 
 Cheers!
