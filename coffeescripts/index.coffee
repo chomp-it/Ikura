@@ -1,32 +1,17 @@
 
-newTextArea                  = document.getElementById 'highlighted-text'
+newTextArea              = document.getElementById 'highlighted-text'
 
-submitCodeButton             = document.getElementById 'submit-main-input'
+keywordsListElement      = document.getElementById 'keywords-list'
+conjunctionsListElement  = document.getElementById 'conjunctions-list'
 
-registerNewKeywordButton     = document.getElementById 'submit-new-keyword-button'
-registerNewConjunctionButton = document.getElementById 'submit-new-conjunction-button'
+keywordToRemove          = document.getElementById 'remove-keyword'
+conjunctionToRemove      = document.getElementById 'remove-conjunction'
 
-keywordsListElement          = document.getElementById 'keywords-list'
-conjunctionsListElement      = document.getElementById 'conjunctions-list'
-
-clearOutputButton            = document.getElementById 'clear-highlighted-text'
-
-removeKeywordButton          = document.getElementById 'submit-remove-keyword-button'
-keywordToRemove              = document.getElementById 'remove-keyword'
-
-removeConjunctionButton      = document.getElementById 'submit-remove-conjunction-button'
-conjunctionToRemove          = document.getElementById 'remove-conjunction'
-
-saveButton                   = document.getElementById 'save-registry'
-loadButton                   = document.getElementById 'load-registry'
-toggleDarkModeElement        = document.getElementById 'toggle-dark-mode'
-
-hideKeywordListButton        = document.getElementById 'hide-keywords'
-hideConjunctionListButton    = document.getElementById 'hide-conjunctions'
+hideKeywordListButton    = document.getElementById 'hide-keywords'
+hideConjunctionListButton= document.getElementById 'hide-conjunctions'
 
 keywordsList     = []
 conjunctionsList = []
-
 darkMode       = off
 
 # replace curly quotes (single or double) with straight quotes
@@ -35,29 +20,21 @@ cleanUp = (text) ->
 
 literalRegex = /^[^a-zA-Z0-9]*[a-zA-Z0-9]+[^a-zA-Z0-9]*$/
 lex = (word) ->
-  if word in keywordsList     then return 'keyword'
-  if word in conjunctionsList then return 'conjunction'
-  if word.match literalRegex  then return 'literal' # refactor to support strings
-  return 'other'
-
-insertKeyword = (keyword) ->
-  keywordColor = document.getElementById('keyword-color-picker').value
-  newTextArea.innerHTML += "<span style='color: #{keywordColor}'>#{keyword}</span> "
-
-insertLiteral = (literal) ->
-  literalColor = document.getElementById('literal-color-picker').value
-  newTextArea.innerHTML += "<span style='color: #{literalColor}'>#{literal}</span> "
-
-insertConjunction = (conjunction) ->
-  conjunctionColor = document.getElementById('conjunction-color-picker').value
-  newTextArea.innerHTML += "<span style='color: #{conjunctionColor}'>#{conjunction}</span> "
+  if word in keywordsList          then 'keyword'
+  else if word in conjunctionsList then 'conjunction'
+  else if word.match literalRegex  then 'literal'
+  else 'other'
 
 insertOther = (word) ->
   color = if darkMode is on then 'white' else 'inherit'
   newTextArea.innerHTML += "<span style='color: #{color}'>#{word}</span> "
 
+insertToken = (token, colorPickerId) ->
+  color = document.getElementById(colorPickerId).value
+  newTextArea.innerHTML += "<span style='color: #{color}'>#{token}</span> "
+
 # basically the main function
-highlightCode = () ->
+highlightCode = ->
   code = document.getElementById('main-input-text').value
   if code.length is 0 then return
 
@@ -78,12 +55,12 @@ highlightCode = () ->
 
     token = lex word
 
-    if token is 'keyword'     then insertKeyword(word)
-    if token is 'literal'     then insertLiteral(word)
-    if token is 'conjunction' then insertConjunction(word)
+    if token is 'keyword'     then insertToken(word, 'keyword-color-picker')
+    if token is 'literal'     then insertToken(word, 'literal-color-picker')
+    if token is 'conjunction' then insertToken(word, 'conjunction-color-picker')
     if token is 'other'       then insertOther(word)
 
-registerKeyword = () ->
+registerKeyword = ->
   newKeyword = document.getElementById('add-keyword').value
 
   unless newKeyword then alert "The textbox is empty"; return
@@ -97,13 +74,13 @@ registerKeyword = () ->
   # clear the input field
   document.getElementById('add-keyword').value = ""
 
-registerConjunction = () ->
+registerConjunction = ->
   newConjunction = document.getElementById('add-conjunction').value
 
   unless newConjunction then alert "The textbox is empty"; return
 
   if newConjunction in conjunctionsList
-    alert("This conjunction is already registered: #{newConjunction}")
+    alert "This conjunction is already registered: #{newConjunction}"
     return
   conjunctionsList.push newConjunction
   conjunctionsListElement.innerHTML += "<li class='conjunction'>#{newConjunction}</li>"
@@ -121,7 +98,7 @@ removeKeyword = ->
   for keywordIterator in keywordsList
     if keywordIterator is keywordToRemove.value then keywordsList.splice keywordsList.indexOf(keywordIterator), 1
 
-  keywords = Array.from keywordsListElement.getElementsByTagName('li')
+  keywords = Array.from keywordsListElement.getElementsByTagName 'li'
   for keywordIterator in keywords
     if keywordIterator.innerHTML is keywordToRemove.value then keywordsListElement.removeChild keywordIterator
 
@@ -188,19 +165,21 @@ toggleConjunctionList = ->
   else
     conjunctionsListElement.style.display = 'none'
     hideConjunctionListButton.innerHTML = 'Show Conjunction List'
-    
-submitCodeButton.addEventListener             'click', highlightCode
-registerNewKeywordButton.addEventListener     'click', registerKeyword
-registerNewConjunctionButton.addEventListener 'click', registerConjunction
-removeKeywordButton.addEventListener          'click', removeKeyword
-removeConjunctionButton.addEventListener      'click', removeConjunction
-saveButton.addEventListener                   'click', saveData
-loadButton.addEventListener                   'click', loadData
-toggleDarkModeElement.addEventListener        'click', toggleDarkMode
-hideKeywordListButton.addEventListener        'click', toggleKeywordList
-hideConjunctionListButton.addEventListener    'click', toggleConjunctionList
 
-clearOutputButton.addEventListener 'click', -> newTextArea.innerHTML = ''
+el = (id) -> document.getElementById id
+
+el('submit-main-input').addEventListener                'click', highlightCode
+el('submit-new-keyword-button').addEventListener        'click', registerKeyword
+el('submit-new-conjunction-button').addEventListener    'click', registerConjunction
+el('submit-remove-keyword-button').addEventListener     'click', removeKeyword
+el('submit-remove-conjunction-button').addEventListener 'click', removeConjunction
+el('save-registry').addEventListener                    'click', saveData
+el('load-registry').addEventListener                    'click', loadData
+el('toggle-dark-mode').addEventListener                 'click', toggleDarkMode
+hideKeywordListButton.addEventListener                'click', toggleKeywordList
+hideConjunctionListButton.addEventListener            'click', toggleConjunctionList
+
+el('clear-highlighted-text').addEventListener 'click', -> newTextArea.innerHTML = ''
 
 document.getElementById('scaffold-keywords').addEventListener 'click', () ->
   ["if", "else", "for", "while"].forEach (keyword) ->
@@ -212,7 +191,7 @@ hidden = false
 document.getElementById('hide-all-forms').addEventListener 'click', () ->
   if hidden
     document.getElementById('forms').style.display = 'block'
-    hidden = false
   else
     document.getElementById('forms').style.display = 'none'
-    hidden = true
+  hidden = !hidden
+
